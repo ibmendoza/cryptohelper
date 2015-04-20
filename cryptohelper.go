@@ -35,12 +35,12 @@ func RandomKey() (string, error) {
 		return "", err
 	}
 
-	encoded := base64.StdEncoding.EncodeToString(key[:])
+	encoded := base64.URLEncoding.EncodeToString(key[:])
 	return encoded, nil
 }
 
 func decodeKey(key string) ([]byte, error) {
-	keyBytes, err := base64.StdEncoding.DecodeString(key)
+	keyBytes, err := base64.URLEncoding.DecodeString(key)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func SecretboxEncrypt(plaintext string, key string) (string, error) {
 	// The nonce is embedded with the returned buffer:
 	// [--nonce(24by)--][--ciphertext--]
 	ciphertext := secretbox.Seal(nonce[:], []byte(plaintext), &nonce, &keyArr)
-	return base64.StdEncoding.EncodeToString(ciphertext), nil
+	return base64.URLEncoding.EncodeToString(ciphertext), nil
 }
 
 // SecretboxDecrypt accepts a b64-encoded buffer consisting of a random 24-bit
@@ -100,7 +100,7 @@ func SecretboxDecrypt(ciphertext string, key string) (string, error) {
 		return "", err
 	}
 
-	cipherBytes, err := base64.StdEncoding.DecodeString(ciphertext)
+	cipherBytes, err := base64.URLEncoding.DecodeString(ciphertext)
 	if err != nil {
 		return "", err
 	}
